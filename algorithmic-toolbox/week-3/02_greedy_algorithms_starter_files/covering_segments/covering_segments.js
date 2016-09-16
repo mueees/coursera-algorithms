@@ -31,12 +31,23 @@ function getPoints(segments) {
     return result;
 }
 
+getPoints([
+    {
+        start: 2,
+        end: 5
+    },
+    {
+        start: 1,
+        end: 4
+    }
+]);
+
 /*
-3
-1 3
-2 5
-3 6
-* */
+ 3
+ 1 3
+ 2 5
+ 3 6
+ * */
 
 // submit
 (function () {
