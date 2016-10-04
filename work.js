@@ -1,42 +1,22 @@
-function getPoints(segments) {
-    var result = {
-        totalPoints: 0,
-        points: []
-    };
+function binarySearch(element, arr) {
+    var left = 0;
+    var right = arr.length;
+    var middle;
 
-    segments.sort(function (a, b) {
-        return a.end - b.end;
-    });
+    while (left < right) {
+        middle = Math.floor((left + right) / 2);
 
-    while(segments[0]){
-        var firstSegment = segments[0];
-        var similarSegments = [firstSegment];
-
-        segments.splice(0, 1);
-
-        var i = segments.length;
-
-        while (i--) {
-            if(segments[i].start <= firstSegment.end){
-                similarSegments.push(segments[i]);
-
-                segments.splice(i, 1);
-            }
+        if (arr[middle] === element) {
+            return middle;
+        } else if (element < arr[middle]) {
+            right = middle;
+        } else {
+            left = middle + 1;
         }
-
-        result.totalPoints++;
-        result.points.push(similarSegments[0].end);
     }
 
-    return result;
+    return -1;
 }
-
-/*
-3
-1 3
-2 5
-3 6
-* */
 
 // submit
 (function () {
@@ -52,32 +32,37 @@ function getPoints(segments) {
     rl.on('line', readLine);
 
     var stage = 0,
-        countOfSegments = 0,
-        segments = [];
+        tempArray,
+        arr = [],
+        elements = [];
 
     function readLine(line) {
-        if(stage === 0){
-            countOfSegments = parseInt(line.toString(), 10);
+        if (stage === 0) {
+            tempArray = line.toString().split(' ');
+            tempArray.shift();
 
-            stage++;
-        } else if(stage <= countOfSegments){
-            var segment = line.toString().split(' ');
-
-            segments.push({
-                start: parseInt(segment[0], 10),
-                end: parseInt(segment[1], 10)
+            tempArray.forEach(function (number) {
+                arr.push(parseInt(number, 10));
             });
 
-            if(stage === countOfSegments){
-                var result = getPoints(segments);
-
-                console.log(result.totalPoints);
-                console.log(result.points.join(' '));
-
-                process.exit();
-            }
-
             stage++;
+        } else if (stage === 1) {
+            tempArray = line.toString().split(' ');
+            tempArray.shift();
+
+            tempArray.forEach(function (number) {
+                elements.push(parseInt(number, 10));
+            });
+
+            var result = [];
+
+            elements.forEach(function (element) {
+                result.push(binarySearch(element, arr))
+            });
+
+            console.log(result.join(' '));
+
+            process.exit();
         }
     }
 })();
